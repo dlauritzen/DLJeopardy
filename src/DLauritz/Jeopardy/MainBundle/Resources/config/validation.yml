@@ -1,0 +1,14 @@
+DLauritz\Jeopardy\MainBundle\Entity\User:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: { fields: email, message: "That email address is already in use." }
+  properties:
+    email:
+      - Email: ~
+    password:
+      - NotBlank: { groups: [registration] }
+      - MinLength: { limit: 6, message: "Password must be at least 6 characters long" }
+
+DLauritz\Jeopardy\MainBundle\Entity\Player:
+  properties:
+    name:
+      - NotBlank: ~

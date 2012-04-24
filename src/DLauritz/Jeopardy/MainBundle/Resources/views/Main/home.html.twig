@@ -1,0 +1,40 @@
+{% extends '::baselayout.html.twig' %}
+
+{% block title %}DLJeopardy{% endblock %}
+{% block content %}
+{% if app.user is not null %} {# User #}
+<div class="row-fluid">
+	<div class="span6">
+		<h2>Your Sessions</h2>
+
+		<ul>
+{% for session in sessions %}
+			<li><a href="{{ path('play_session', {'session_hash':session.hash}) }}">{{ session.name }}</a> (<em>{{ session.hash }}</em>)</li>
+{% else %}
+			<li><em>None</em></li>
+{% endfor %}
+		</ul>
+		
+		<h2>Your Games</h2>
+		<ul>
+{%  for game in games %}
+			<li>{{ game.name }}</li>
+{% else %}
+			<li><em>None</em></li>
+{% endfor %}
+		</ul>
+
+	</div>
+	<div class="span6">
+		{% include 'DLauritzJeopardyMainBundle:Main:joingameform.html.twig' %}
+	</div>
+</div>
+{% else %} {# Visitor #}
+<div class="row">
+	<div class="span6 offset3">
+		<p><a href="{{ path('login') }}">Sign in</a> to moderate or enter a game hash to play:</p>
+		{% include 'DLauritzJeopardyMainBundle:Main:joingameform.html.twig' %}
+	</div>
+</div>
+{% endif %}
+{% endblock %}

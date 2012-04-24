@@ -1,0 +1,11 @@
+{% extends '::baselayout.html.twig' %}
+
+{% block title %}View Board{% endblock %}
+
+{% block topbar %}
+<h1>Topbar!</h1>
+{% endblock %}
+
+{% block content %}
+{% include 'DLauritzJeopardyGameBundle:Board:include.html.twig' with {'board':board} %}
+{% endblock %}

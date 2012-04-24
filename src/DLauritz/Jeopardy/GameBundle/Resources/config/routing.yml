@@ -1,0 +1,23 @@
+column_detail:
+  pattern: /column/{id}/detail.{_format}
+  defaults:
+    _controller: DLauritzJeopardyGameBundle:Column:detail
+    _format: html
+  requirements:
+    _format: html|json
+    
+board_detail:
+  pattern: /board/{id}/detail.{_format}
+  defaults:
+    _controller: DLauritzJeopardyGameBundle:Board:detail
+    _format: html
+  requirements:
+    _format: html|json
+    
+game_detail:
+  pattern: /game/{id}/detail.{_format}
+  defaults:
+    _controller: DLauritzJeopardyGameBundle:Game:detail
+    _format: html
+  requirements:
+    _format: html|json

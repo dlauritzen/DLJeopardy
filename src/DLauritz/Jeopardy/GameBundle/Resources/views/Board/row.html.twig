@@ -1,0 +1,15 @@
+{% if row == 0 %}
+<thead>
+	<tr>
+{% for column in board.getColumns %}
+		<th class="span2 column-name">{{ column.name }}</th>
+{% endfor %}
+	</tr>
+</thead>
+{% else %}
+<tr>
+{% for column in board.getColumns %}
+	<td class="span2 question">${{ column.getQuestion(row)['value'] }}</td>
+{% endfor %}
+</tr>
+{% endif %}

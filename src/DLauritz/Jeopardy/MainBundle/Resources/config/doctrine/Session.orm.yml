@@ -1,0 +1,55 @@
+DLauritz\Jeopardy\MainBundle\Entity\Session:
+  type: entity
+  table: sessions
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    # Session identifier hash. This string is used in the URL to join a game. The 
+    # moderator can use a random hash or create their own. It must be unique
+    hash:
+      type: string
+      unique: true
+    # Game name. Displayed in title and on page
+    name:
+      type: string
+    # Game description. Any extra information displayed to the players
+    description:
+      type: string
+      nullable: true
+      default: ''
+
+    # These next three fields pinpoint the displayed page on player screens
+
+    # Game stage (1 = single, 2 = double, 3 = final)
+    game_stage:
+      type: smallint
+    # 1-6, left to right
+    current_column:
+      type: smallint
+    # 1-5, top to bottom
+    current_question:
+      type: smallint
+  oneToMany:
+    players:
+      targetEntity: Player
+      mappedBy: session
+    moves:
+      targetEntity: Move
+      mappedBy: session
+  manyToOne:
+    # The questions
+    game:
+      targetEntity: DLauritz\Jeopardy\GameBundle\Entity\Game
+      inversedBy: sessions
+      joinColumn:
+        name: game_id
+        referencedColumnName: id
+    # The user running the game
+    moderator:
+      targetEntity: User
+      inversedBy: sessions
+      joinColumn:
+        name: moderator_id
+        referencedColumnName: id

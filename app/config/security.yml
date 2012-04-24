@@ -1,0 +1,25 @@
+security:
+    encoders:
+        DLauritz\Jeopardy\MainBundle\Entity\User: sha512
+
+    providers:
+        main:
+            entity: { class: DLauritz\Jeopardy\MainBundle\Entity\User, property: email }
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        user_area:
+            pattern: ^/
+            form_login:
+                login_path: /login
+                check_path: /login_check
+            logout:
+                path: /logout
+                target: /
+            anonymous: ~
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }

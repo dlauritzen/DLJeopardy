@@ -1,0 +1,23 @@
+DLauritz\Jeopardy\MainBundle\Entity\Player:
+  type: entity
+  table: session_players
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    web_session:
+      type: string
+      nullable: true
+    name:
+      type: string
+    color:
+      type: string
+      nullable: true
+  manyToOne:
+    session:
+      targetEntity: Session
+      inversedBy: players
+      joinColumn:
+        name: session_id
+        referencedColumnName: id

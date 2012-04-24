@@ -1,0 +1,9 @@
+{"id":{{ column.id|json_encode|raw }},
+"name":{{ column.name|json_encode|raw }},
+"questions":[
+	{"value":{{ column.question1Value|json_encode|raw }},"text":{{ column.question1Text|json_encode|raw }},"answer":{{ column.question1Answer|json_encode|raw }}},
+	{"value":{{ column.question2Value|json_encode|raw }},"text":{{ column.question2Text|json_encode|raw }},"answer":{{ column.question2Answer|json_encode|raw }}},
+	{"value":{{ column.question3Value|json_encode|raw }},"text":{{ column.question3Text|json_encode|raw }},"answer":{{ column.question3Answer|json_encode|raw }}},
+	{"value":{{ column.question4Value|json_encode|raw }},"text":{{ column.question4Text|json_encode|raw }},"answer":{{ column.question4Answer|json_encode|raw }}},
+	{"value":{{ column.question5Value|json_encode|raw }},"text":{{ column.question5Text|json_encode|raw }},"answer":{{ column.question5Answer|json_encode|raw }}}
+]}

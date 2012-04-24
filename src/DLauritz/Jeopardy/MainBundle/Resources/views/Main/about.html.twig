@@ -1,0 +1,71 @@
+{% extends '::baselayout.html.twig' %}
+
+{% block title %}About DLJeopardy{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="span10 offset1">
+			<div class="page-header"><h2>About <small>DLJeopardy</small></h2></div>
+			
+			<p>
+				DLJeopardy as you see it is the third in a long line of Jeopardy-esque games intended for classroom instruction.
+				This website offers moderated classroom-style version of the game with the teacher directing the progress of the
+				game and students competing for correct answers. There is complete flexibility on the part of the moderator to
+				move between game boards and assign answers to players or teams.
+			</p>
+			<p>
+				The game may be run from a central display with the moderator controlling on a separate computer, or each player
+				may have their own terminal to view the game. In either case, the moderator sees more information than should
+				be visible to the players and so should not display their own screen.
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span10 offset1">
+			<h3>Moderator View</h3>
+			<p>
+				The moderator is the only user able to control the flow of the game. They see details of each answered question 
+				and select what the players see on their screens.
+			</p> 
+		</div>
+	</div>
+	<div class="row">
+		<div class="span10 offset1">
+			<h3>Player View</h3>
+			<p>
+				Users do not need to log in or register to join or view games. When a player enters a game, they are presented with
+				the option to "Join" the game, registering their website session with that particular game and selecting a display
+				name visible to the moderator.
+			</p>
+			<p>
+				Players only see the current state of the game and have no means of controlling or answering questions.
+			</p>
+			
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="span10 offset1">
+			<h3>Legal</h3>
+			<p>
+				DLJeopardy is Copyright &copy; 2012 Dallin Lauritzen, licensed under a Creative Commons Attribution 3.0 Unported 
+				License. Feel free to share or modify the source code (available on GitHub 
+				<a href="https://github.com/dlauritzen/DLJeopardy">here</a>) so long as you offer proper attribution for what I've
+				done. Also, if you use this code, please email me at <a href="mailto:dallin@dallinlauritzen.com">dallin@dallinlauritzen.com</a>
+				so I can follow your progress.
+			</p>
+			<p>
+				DLJeopardy was produced using the <a href="http://www.symfony.com">Symfony</a> PHP Framework and 
+				<a href="http://twitter.github.com/bootstrap/index.html">Bootstrap</a>, from Twitter. DLJeopardy itself is licensed
+				under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons 
+				Attribution 3.0 Unported License</a>.
+			</p>
+			<p>
+				"Jeopardy!" is a trademark of Jeopardy Productions, Inc. and this website has no affiliation whatsoever with the
+				company or the popular game show.
+			</p>
+		</div>
+	</div>
+</div>
+{% endblock %}

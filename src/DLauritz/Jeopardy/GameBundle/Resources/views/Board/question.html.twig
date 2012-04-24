@@ -1,0 +1,42 @@
+<div class="row-fluid">
+	<div class="span12">
+		<h2>{{ column|raw }} <small>for {{ value|raw }}</small></h2>
+	</div>
+</div>
+{% if show_question %}
+<div class="row-fluid">
+	<div class="span12">
+		<div class="well">{{ question|raw }}</div>
+	</div>
+</div>
+{% if moderator %}
+<div class="row-fluid">
+	<div class="span12">
+		<div class="alert alert-info">
+			<strong>Answer:</strong> {{ answer|raw }}
+		</div>
+		<a class="btn btn-primary" href="#" onclick="returnToBoard(this); return false;">Return to Board</a>
+		<a class="btn btn-danger" href="#" onclick="failQuestion(this); return false;">Timeout</a>
+		{% set answers = session.whoAnswered(session.gameStage, session.currentColumn, session.currentQuestion) %}
+		
+		{% if answers is not empty %}
+			<h2>Answers</h2>
+			<ul>
+			{% if answers['correct'] is defined %}
+				<li>Correct: {{ answers['correct'].name }}</li>
+			{% endif %}
+			{% if answers['incorrect'] is defined %}
+				{% for incorrect in answers['incorrect'] %}
+					{% if incorrect['player'] is null %}
+					<li><em>Failed</em></li>
+					{% else %}
+					<li>{{ incorrect['player'].name }}{% if incorrect['answer'] is not null %}: "{{ incorrect['answer'] }}"{% endif %}</li>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+			</ul>
+		{% endif %}
+	</div>
+</div>
+{% endif %} {# endif: moderating #}
+{% endif %} {# endif: show_questions #}

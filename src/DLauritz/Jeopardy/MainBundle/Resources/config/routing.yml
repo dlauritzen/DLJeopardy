@@ -1,0 +1,125 @@
+# The main page
+home:
+  pattern: /
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:Main:home
+
+# The "About" page
+about:
+  pattern: /about
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:Main:about
+
+
+# Session control
+
+ 
+# Main-page form action to "find" a game by its hash
+# If the hash is found, redirect to join, else return and show error
+session_search:
+  pattern: /game
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:Session:search
+    
+# Playing a game
+play_session:
+  pattern: /play/{session_hash}.{_format}
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:Session:play
+    _format: html
+  requirements:
+    _format: html
+
+# This is how the game session updates via AJAX
+session_status:
+  pattern: /status/{id}.{_format}
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:Session:status
+    _format: json
+  requirements:
+    _format: json|html
+
+
+# Player control
+
+
+# Add a player to the game
+join_session:
+  pattern: /join/{session_id}
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:Players:joinGame
+  requirements:
+    session_id: \d+
+
+# Boot requires moderator, exit is anyone
+player_exit:
+  pattern: /player/{id}/{action}
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:Players:exit
+  requirements:
+    action: boot|exit
+    id: \d+
+
+# Answer requires moderator
+player_answer:
+  pattern: /player/{id}/answer/{type}
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:Players:answer
+  requirements:
+    id: \d+
+    type: yes|no|edit
+
+# No player answered the question
+fail_question:
+  pattern: /session/fail/{session_id}/{board}/{column}/{question}
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:Players:fail
+    _format: json
+  requirements:
+    session_id: \d+
+    board: 1|2|3|4
+    column: 0|1|2|3|4|5|6
+    question: 0|1|2|3|4|5
+
+session_update:
+  pattern: /session/edit/{session_id}/{board}/{column}/{question}
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:Session:setStatus
+  requirements:
+    session_id: \d+
+    board: 1|2|3|4
+    column: 0|1|2|3|4|5|6
+    question: 0|1|2|3|4|5
+
+player_list:
+  pattern: /players/list/{session_id}.{_format}
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:Players:list
+    _format: json
+  requirements:
+    session: \d+
+    _format: json|html
+
+# Registration and Logging In
+
+
+register:
+  pattern: /register
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:User:register
+
+register_check:
+  pattern: /register_check
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:User:registerCheck
+
+login:
+  pattern: /login
+  defaults:
+    _controller: DLauritzJeopardyMainBundle:User:login
+
+login_check:
+  pattern: /login_check
+
+logout:
+  pattern: /logout

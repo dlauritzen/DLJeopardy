@@ -1,0 +1,21 @@
+{"gameStage":{{ session.gameStage|json_encode|raw }},"currentColumn":{{ session.currentColumn|json_encode|raw }},"currentQuestion":{{ session.currentQuestion|json_encode|raw }}{% if moderator %},"numPlayers":{{ session.players|length|json_encode|raw }}{% endif %}}
+{#
+{"gameStage":{{ session.gameStage|json_encode|raw }},
+{% if not session.inFinalJeopardy %}
+{% if session.hasCurrentQuestion %}
+ "showQuestion":true,
+ "currentColumn":{{ session.currentColumn|json_encode|raw }},
+ "currentColumnName":{{ session.currentColumnName|json_encode|raw }},
+ "currentQuestion":{"value":{{ session.currentQuestionArr['value']|json_encode|raw }},
+ 					"question":{{ session.currentQuestionArr['text']|json_encode|raw }}{% if moderator %},
+ 					"answer":{{ session.currentQuestionArr['answer']|json_encode|raw }}{% endif %}}
+{% else %}
+ "showQuestion":false
+{% endif %}
+{% else %}
+ "category":{{ session.game.finalCategory|json_encode|raw }},
+ "question":{{ session.game.finalQuestion|json_encode|raw }}{% if moderator %},
+ "answer":{{ session.game.finalAnswer|json_encode|raw }}{% endif %}
+{% endif %}
+}
+#}

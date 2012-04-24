@@ -1,0 +1,28 @@
+{% extends '::baselayout.html.twig' %}
+
+{% block title %}Join Game "{{ session.name }}" - DLJeopardy{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="span6 offset3">
+		{{ form_errors(form) }}
+		<form class="form form-horizontal well" method="POST" action="{{ path('join_session', {'session_id':session.id}) }}">
+			<fieldset>
+				<legend>Join Game</legend>
+				<div class="control-group">
+					{{ form_label(form.name, "Name", {'attr':{'class':'control-label'}}) }}
+					<div class="controls">
+						{{ form_widget(form.name, {'attr':{'class':'input-large'}}) }}
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+				{{ form_rest(form) }}
+			</fieldset>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+DLauritz\Jeopardy\GameBundle\Entity\Board:
+  type: entity
+  table: boards
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  oneToOne:
+    column_one:
+      targetEntity: Column
+    column_two:
+      targetEntity: Column
+    column_three:
+      targetEntity: Column
+    column_four:
+      targetEntity: Column
+    column_five:
+      targetEntity: Column
+    column_six:
+      targetEntity: Column

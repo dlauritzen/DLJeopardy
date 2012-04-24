@@ -1,0 +1,25 @@
+<div class="navbar navbar-fixed-top" id="navbar">
+	<div class="navbar-inner">
+		<div class="container">
+			<!-- Logo -->
+			<a class="brand" href="{{ path('home') }}">DLJeopardy</a>
+
+			<ul class="nav">
+{% if app.user is not null %}
+				<li class="dropdown" id="profile">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#profile">
+						{{ app.user.displayName }} <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="{{ path('logout') }}">Log Out</a></li>
+					</ul>
+				</li>
+{% else %}
+				<li><a href="{{ path('login') }}">Sign In</a></li>
+				<li class="divider-vertical"></li>
+				<li><a href="{{ path('register') }}">Sign Up</a></li>
+{% endif %}
+			</ul>
+		</div>
+	</div>
+</div>

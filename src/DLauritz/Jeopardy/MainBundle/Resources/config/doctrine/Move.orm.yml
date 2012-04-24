@@ -1,0 +1,39 @@
+DLauritz\Jeopardy\MainBundle\Entity\Move:
+  type: entity
+  table: session_moves
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  manyToOne:
+    # What game
+    session:
+      targetEntity: Session
+      inversedBy: moves
+      joinColumn:
+        name: session_id
+        referencedColumnName: id
+    # Who answered
+    player:
+      targetEntity: Player
+      inversedBy: moves
+      joinColumn:
+        name: player_id
+        referencedColumnName: id
+  fields:
+    # Coordinates of the question
+    board:
+      type: smallint
+    column:
+      column: board_column
+      type: smallint
+    question:
+      type: smallint
+    # Were they right
+    correct:
+      type: boolean
+    # Optional answer
+    answer:
+      type: string
+      nullable: true
+      default: ''

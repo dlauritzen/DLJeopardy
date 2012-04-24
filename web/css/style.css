@@ -1,0 +1,46 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	padding-top: 18px;
+	padding-bottom: 18px;
+}
+
+.column-name {
+	font-weight: bold;
+	text-align: center;
+}
+
+.question-value {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	text-align: center;
+}
+
+.fake-nav {
+	position: fixed;
+	left: 0;
+	top: 0;
+}
+
+ul.inline li {
+	display: inline;
+}
+
+#footer {
+	font-size: 11px;
+	color: #aaa;
+}
+
+#footer a {
+	color: #aaa;
+	text-decoration: underline;
+}
+
+#footer li {
+	display: inline;
+	padding-right: 10px;
+}
+
+.right {
+	text-align: right;
+}

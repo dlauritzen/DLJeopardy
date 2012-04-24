@@ -1,0 +1,34 @@
+<div class="row-fluid">
+	<div class="span3" id="moderator-panel">
+		<h2>Moderation</h2>
+		<div class="well">
+			<ul class="unstyled">
+				<li><strong>Hash</strong>: <a href="{{ url('play_session', {'session_hash': session.hash}) }}">{{ session.hash }}</a>
+				<li><strong>Stage</strong>:
+{% if session.gameStage == 1 %} Single Jeopardy 
+					(<a href="{{ path('session_update', {'session_id':session.id, 'board':2, 'column':0, 'question': 0}) }}" rel="tooltip" title="Advance to Double Jeopardy">D</a>)
+{% elseif session.gameStage == 2 %} Double Jeopardy
+					(<a href="{{ path('session_update', {'session_id':session.id, 'board':1, 'column':0, 'question': 0}) }}" rel="tooltip" title="Return to Single Jeopardy">S</a>,
+					<a href="{{ path('session_update', {'session_id':session.id, 'board':3, 'column':0, 'question': 0}) }}" rel="tooltip" title="Advance to Final Jeopardy">F</a>)
+{% else %} Final Jeopardy
+					(<a href="{{ path('session_update', {'session_id':session.id, 'board':1, 'column':0, 'question': 0}) }}" rel="tooltip" title="Return to Single Jeopardy">S</a>,
+					<a href="{{ path('session_update', {'session_id':session.id, 'board':2, 'column':0, 'question': 0}) }}" rel="tooltip" title="Return to Double Jeopardy">D</a>)
+{% endif %}
+				</li>
+{% if session.hasCurrentQuestion %}
+				<li><strong>Column</strong>: {{ session.currentColumnName }}</li>
+				<li><strong>Question</strong>: {{ session.currentQuestionArr['value'] }}</li>
+				<li><strong>Answer</strong>: {{ session.currentQuestionArr['answer'] }}</li>
+{% endif %}
+			</ul>
+			
+			<h3>Players</h3>
+			<ul class="unstyled" id="player-list">
+			{% include 'DLauritzJeopardyMainBundle:Players:list.html.twig' with {'session':session} %}
+			</ul>
+		</div>
+	</div> {# end div.span2#moderator-panel #}
+	<div class="span9">
+{% include 'DLauritzJeopardyMainBundle:Session:player-view.html.twig' with {'session':session, 'moderator':true, 'canJoin': canJoin, 'player': player} %}
+	</div> {# end div.span9 #}
+</div>

@@ -1,0 +1,67 @@
+<div class="row-fluid">
+	<div class="span12" id="player-view">
+	{% if session.inFinalJeopardy %}
+		{% include 'DLauritzJeopardyGameBundle:Board:question.html.twig' with 
+			{'column':session.game.finalCategory, 
+			'value':'Wager', 
+			'question':session.game.finalQuestion, 
+			'answer':session.game.finalAnswer, 
+			'moderator':moderator,
+			'show_question':true,
+			'session':session } %}
+	{% else %}
+		{% if session.hasCurrentQuestion %} {# Show single question #}
+
+		{% include 'DLauritzJeopardyGameBundle:Board:question.html.twig' with 
+			{'column':session.currentColumnName, 
+			'value':session.currentQuestionArr['value'], 
+			'question':session.currentQuestionArr['text'], 
+			'answer':session.currentQuestionArr['answer'], 
+			'moderator':moderator,
+			'show_question':true,
+			'session':session } %}
+
+		{% else %} {# Show entire board #}
+		<div class="row-fluid">
+			<div class="span12">
+				<h2>
+					{{ session.name }} 
+					<small>
+						{{ session.description }}
+						{% if not moderator and canJoin %}
+						<a href="{{ path('join_session', {'session_id':session.id}) }}" class="btn btn-primary">Join Game</a>
+						{% endif %}
+					</small>
+				</h2>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span12">
+				{% include 'DLauritzJeopardyGameBundle:Board:include.html.twig' with {'board': session.currentBoard, 'session': session} %}
+			</div>
+		</div>
+
+		{% endif %} {# endif: session.hasCurrentQuestion #}
+	{% endif %} {# endif: session.inFinalJeopardy #}
+		<div class="row-fluid">
+			<div class="span4">
+				<p>
+					Moderator: {{ session.moderator.displayName }}
+					<i class="icon-info-sign" rel="popover" title="Session Information" data-content="Session: {{ app.session.id }}"></i>
+				</p>
+			</div>
+			<div class="span4 center">
+			{% if not canJoin and player is not null %}
+				<p>
+					Playing as: {{ player.name }} (<a href="{{ path('player_exit', {'id':player.id, 'action':'exit'}) }}">Leave</a>)
+				</p>
+			{% else %}
+				&nbsp;
+			{% endif %}
+			</div>
+			<div class="span4 right">
+				<p>Game Board: "{{ session.game.name }}" by {{ session.game.owner.displayName }}</p>
+			</div>
+		</div>
+	</div> {# end div.span12#player-view #}
+</div> {# end div.row #}

@@ -1,0 +1,44 @@
+DLauritz\Jeopardy\GameBundle\Entity\Column:
+  type: entity
+  table: columns
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    name:
+      type: string
+    question_1_value:
+      type: integer
+    question_1_text:
+      type: string
+    question_1_answer:
+      type: string
+      
+    question_2_value:
+      type: integer
+    question_2_text:
+      type: string
+    question_2_answer:
+      type: string
+      
+    question_3_value:
+      type: integer
+    question_3_text:
+      type: string
+    question_3_answer:
+      type: string
+      
+    question_4_value:
+      type: integer
+    question_4_text:
+      type: string
+    question_4_answer:
+      type: string
+      
+    question_5_value:
+      type: integer
+    question_5_text:
+      type: string
+    question_5_answer:
+      type: string

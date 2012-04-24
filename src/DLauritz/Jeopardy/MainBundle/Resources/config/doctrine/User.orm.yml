@@ -1,0 +1,32 @@
+DLauritz\Jeopardy\MainBundle\Entity\User:
+  type: entity
+  table: j_users
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    # E-Mail to log in with
+    email:
+      type: string
+      unique: true
+    # Password
+    salt:
+      type: string
+      length: 32
+    password:
+      type: string
+    # Name shown when moderating
+    display_name:
+      type: string
+    is_active:
+      type: boolean
+  oneToMany:
+    # Games in progress
+    sessions:
+      targetEntity: Session
+      mappedBy: moderator
+    # Games owned (editable)
+    games:
+      targetEntity: DLauritz\Jeopardy\GameBundle\Entity\Game
+      mappedBy: owner

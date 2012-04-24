@@ -1,0 +1,9 @@
+{"id":{{ board.id|json_encode|raw }},
+"columns":[
+	{% include 'DLauritzJeopardyGameBundle:Column:detail.json.twig' with {'column':board.columnOne} %},
+	{% include 'DLauritzJeopardyGameBundle:Column:detail.json.twig' with {'column':board.columnTwo} %},
+	{% include 'DLauritzJeopardyGameBundle:Column:detail.json.twig' with {'column':board.columnThree} %},
+	{% include 'DLauritzJeopardyGameBundle:Column:detail.json.twig' with {'column':board.columnFour} %},
+	{% include 'DLauritzJeopardyGameBundle:Column:detail.json.twig' with {'column':board.columnFive} %},
+	{% include 'DLauritzJeopardyGameBundle:Column:detail.json.twig' with {'column':board.columnSix} %}
+]}

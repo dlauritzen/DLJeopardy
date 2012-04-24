@@ -1,0 +1,19 @@
+{% for player in session.players %}
+	<li>
+		<ul class="unstyled inline">
+			<li><a href="{{ path('player_exit', {'id':player.id, 'action':'boot'}) }}" rel="tooltip" title="Remove Player"><i class="icon-ban-circle"></i></a></li>
+			
+			{% if session.hasCurrentQuestion %}
+			<li><a href="#" onclick="answerQuestion('{{ url('player_answer', {'id':player.id, 'type':'yes'}) }}'); return false;" rel="tooltip" title="Correct"><i class="icon-ok"></i></a></li>
+			<li><a href="#" onclick="answerQuestion('{{ url('player_answer', {'id':player.id, 'type':'no'}) }}'); return false;" rel="tooltip" title="Incorrect"><i class="icon-remove"></i></a></li>
+			<!-- 
+				<li><a href="#" onclick="answerQuestion('{{ url('player_answer', {'id':player.id, 'type':'edit'}) }}'); return false;" rel="tooltip" title="Edit Answer"><i class="icon-edit"></i></a></li>
+			-->
+			{% endif %}
+			
+			<li>{{ player.name }}</li> 
+		</ul>
+	</li>
+{% else %}
+	<li><em>None</em></li>
+{% endfor %}

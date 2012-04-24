@@ -1,0 +1,6 @@
+{"id":{{ game.id|json_encode|raw }},
+"single":{% include 'DLauritzJeopardyGameBundle:Board:detail.json.twig' with {'board': game.singleBoard} %},
+"double":{% include 'DLauritzJeopardyGameBundle:Board:detail.json.twig' with {'board': game.doubleBoard} %},
+"finalCat":{{ game.finalCategory|json_encode|raw }},
+"finalQuestion":{{ game.finalQuestion|json_encode|raw }},
+"finalAnswer":{{ game.finalAnswer|json_encode|raw }}}

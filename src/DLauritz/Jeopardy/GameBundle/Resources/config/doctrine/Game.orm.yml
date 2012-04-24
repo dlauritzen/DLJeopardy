@@ -1,0 +1,41 @@
+DLauritz\Jeopardy\GameBundle\Entity\Game:
+  type: entity
+  table: games
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    # If true, the game is playable (but not editable) by any moderator.
+    # If false, only the owner can start session
+    public:
+      type: boolean
+    name:
+      type: string
+    # Final Jeopardy
+    final_category:
+      type: string
+    final_question:
+      type: string
+    final_answer:
+      type: string
+  oneToOne:
+    # The Single Jeopardy questions
+    single_board:
+      targetEntity: Board
+    # The Double Jeopardy questions
+    double_board:
+      targetEntity: Board
+  oneToMany:
+    # All currently-running sessions of this game board
+    sessions:
+      targetEntity: DLauritz\Jeopardy\MainBundle\Entity\Session
+      mappedBy: game
+  manyToOne:
+    # The creator/owner of the game. This is the only user that can edit the questions
+    owner:
+      targetEntity: DLauritz\Jeopardy\MainBundle\Entity\User
+      inversedBy: games
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id

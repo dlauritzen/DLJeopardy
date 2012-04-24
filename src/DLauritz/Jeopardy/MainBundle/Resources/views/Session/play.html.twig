@@ -1,0 +1,142 @@
+{% extends '::baselayout.html.twig' %}
+
+{% set moderator = app.user is not null and app.user.id == session.moderator.id %}
+
+{% block title %}{% if moderator %}Moderating {% endif %}"{{ session.name }}" - DLJeopardy{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}
+
+{% block header_script %}
+	{{ parent() }}
+	
+	currentStage = {{ session.gameStage }};
+	currentColumn = {{ session.currentColumn }};
+	currentQuestion = {{ session.currentQuestion }};
+	{% if moderator %}
+	numPlayers = {{ session.players|length }};
+	
+	function openQuestion(div, url) {
+		$(div).html('Loading...');
+		$.ajax({
+			'url': url, 
+			'dataType': 'json'
+		}).done(function(data) {
+			{% if moderator %}
+			if (data.success) {
+				refreshPlayerView();
+				//refreshPlayerList();
+			} else {
+				{% if app.debug %}
+				$("#debug").html('error opening question from url ' + url);
+				{% endif %}
+			}
+			{% endif %}
+		});
+	}
+	
+	function answerQuestion(url) {
+		$.ajax({
+			'url': url,
+			'dataType': 'json'
+		}).done(function(data) {
+			refreshPlayerView();
+		});
+	}
+	
+	function refreshPlayerList() {
+		$.ajax({
+			'url': '{{ url('player_list', {'session_id':session.id,'_format':'html'}) }}',
+			'dataType': 'html'
+		}).done(function(html) {
+			$("#player-list").html(html);
+		});
+	}
+	
+	function returnToBoard(e) {
+		$(e).html('Returning...');
+		$.ajax({
+			'url': '{{ path('session_update', {'session_id':session.id,'board':session.gameStage,'column':0,'question':0}) }}',
+			'dataType': 'json'
+		}).done(function(data) {
+			refreshPlayerView();
+		});
+	}
+	
+	function failQuestion(e) {
+		$(e).html('Loading...');
+		$.ajax({
+			'url': '{{ url('fail_question', {'session_id':session.id,'board':session.gameStage,'column':session.currentColumn,'question':session.currentQuestion}) }}',
+			'dataType': 'json'
+		}).done(function() {
+			returnToBoard(e);
+		});
+	}
+	
+	{% endif %}
+	
+	function refreshPlayerView() {
+		$.ajax({
+			'url': '{{ url('session_status', {'id':session.id,'_format':'html'}) }}',
+			'dataType': 'html'
+		}).done(function(html) {
+			$("#player-view").html(html);
+			{% if moderator %}
+			refreshPlayerList();
+			{% endif %}
+		});
+	}
+	
+	// The infinite-loop callback that checks game session status
+	function checkForUpdates() {
+		$.ajax({
+			'url': '{{ url('session_status', {'id':session.id,'_format':'json'}) }}', 
+			'dataType': 'json'
+		}).done(function(data) {
+			sameStage = (currentStage == data.gameStage);
+			sameCol = (currentColumn == data.currentColumn);
+			sameQ = (currentQuestion == data.currentQuestion);
+			{% if moderator %}
+			sameNum = (numPlayers == data.numPlayers);
+			numPlayers = data.numPlayers;
+			{% endif %}
+			
+			currentStage = data.gameStage;
+			currentColumn = data.currentColumn;
+			currentQuestion = data.currentQuestion;
+			
+			{% if app.debug %}
+			$("#debug").html('');
+			$("#debug").append("<p>Stage: " + currentStage + "; Column: " + currentColumn + "; Question: " + currentQuestion + {% if moderator %}"; NumPlayers: " + numPlayers + {% endif %}"</p>");
+			{% endif %}
+			
+			if (sameStage && sameCol && sameQ) {
+				return;
+			} else {
+				// something changed. Redraw the player view
+				{% if app.debug %}
+				$("#debug").append('<p><b>Something Changed!</b></p>');
+				{% endif %}
+				refreshPlayerView();
+			}
+			{% if moderator %}				
+			if (!sameNum) {
+				refreshPlayerList();
+			}
+			{% endif %}
+		});
+	}
+{% endblock %}
+
+{% block jquery_ready %}
+	makeTimer(checkForUpdates, 2000);
+{% endblock %}
+
+{% block content %}
+{% if moderator %} {# Moderator version #}
+{% include 'DLauritzJeopardyMainBundle:Session:moderator-view.html.twig' with {'session':session, 'moderator':true, 'canJoin':canJoin, 'player':player} %}
+{% else %} {# Player version #}
+{% include 'DLauritzJeopardyMainBundle:Session:player-view.html.twig' with {'session':session, 'moderator':false, 'canJoin': canJoin, 'player': player} %}
+{% endif %} {# endif: (not) moderator #}
+{% endblock %} {# endblock: content #}

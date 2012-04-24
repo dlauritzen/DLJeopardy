@@ -1,0 +1,50 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+		{% for c in 1..6 %}
+			<th class="span2"><div class="column-name">{{ board.getColumn(c).name|raw }}</div></th>
+		{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		{% for r in 1..5 %}
+		<tr>
+			{% for c in 1..6 %}
+			{% set question = board.getQuestion(c, r) %}
+			<td class="span2">
+				{% set answers = session.whoAnswered(session.gameStage, c, r) %}
+				{% if answers is not empty %} {# Answered #}
+					{% if moderator %}
+					<ul>
+						{% if answers['correct'] is defined %}
+							<li><strong>Correct:</strong> {{ answers['correct'].name }}</li>
+						{% endif %}
+						{% if answers['incorrect'] is defined %}
+						{% for incorrect in answers['incorrect'] %}
+							{% if incorrect['player'] is null %}
+							<li><em>Failed</em></li>
+							{% else %}
+							<li>{{ incorrect['player'].name }}{% if incorrect['answer'] is not null %}: "{{ incorrect['answer'] }}"{% endif %}</li>
+							{% endif %}
+						{% endfor %}
+						{% endif %}
+					</ul>
+					{% else %}&nbsp;
+					{% endif %} {# endif: moderator #}
+				{% else %} {# Not yet answered #}
+				<div class="question-value" id="b{{ session.gameStage }}c{{ c }}q{{ r }}">
+					{% if moderator %}
+					<a href="#" onclick="openQuestion(this,'{{ url('session_update', {'session_id':session.id, 'board':session.gameStage, 'column':c, 'question':r}) }}'); return false;">{{ question['value'] }}</a>
+					{% else %}
+					{{ question['value'] }}
+					{% endif %}
+				</div>
+				{% endif %} {# endif: answers is empty #}
+			</td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% if session is defined %}
+{% endif %}

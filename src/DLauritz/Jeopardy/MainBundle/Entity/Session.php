@@ -1,0 +1,341 @@
+<?php
+
+namespace DLauritz\Jeopardy\MainBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * DLauritz\Jeopardy\MainBundle\Entity\Board
+ */
+class Session
+{
+    /**
+     * @var bigint $id
+     */
+    private $id;
+
+    /**
+     * @var string $hash
+     */
+    private $hash;
+
+    /**
+     * @var string $name
+     */
+    private $name;
+
+    /**
+     * @var string $description
+     */
+    private $description;
+
+    /**
+     * @var smallint $game_stage
+     */
+    private $game_stage;
+
+    /**
+     * @var smallint $current_column
+     */
+    private $current_column;
+
+    /**
+     * @var smallint $current_question
+     */
+    private $current_question;
+
+    /**
+     * @var DLauritz\Jeopardy\GameBundle\Entity\Game
+     */
+    private $game;
+
+    /**
+     * @var DLauritz\Jeopardy\MainBundle\Entity\User
+     */
+    private $moderator;
+    
+    /**
+     * @var DLauritz\Jeopardy\MainBundle\Entity\Player
+     */
+    private $players;
+
+    /**
+     * @var DLauritz\Jeopardy\MainBundle\Entity\Move
+     */
+    private $moves;
+    
+    public function getWhoAnswered($board, $column, $question) {
+    	$res = array();
+    	foreach ($this->moves as $move) {
+    		if ($board == $move->getBoard() &&
+    				$column == $move->getColumn() &&
+    				$question == $move->getQuestion()) {
+    			if ($move->getCorrect()) {
+    				$res['correct'] = $move->getPlayer();
+    			} else {
+    				$res['incorrect'][] = array('player' => $move->getPlayer(), 'answer' => $move->getAnswer());
+    			}
+    		}
+    	}
+    	
+    	return $res;
+    }
+    
+    public function getHasCurrentQuestion() {
+    	return $this->getCurrentColumn() != 0 && $this->getCurrentQuestion() != 0;
+    }
+
+    public function getCurrentBoard() {
+    	switch($this->getGameStage()) {
+    		case 1:
+    			return $this->getGame()->getSingleBoard();
+    		case 2:
+    			return $this->getGame()->getDoubleBoard();
+    		default:
+    			return null;
+    	}
+    }
+    
+    public function getCurrentQuestionArr() {
+    	if (!$this->getHasCurrentQuestion() || $this->getInFinalJeopardy()) {
+    		return null;
+    	}
+    	return $this->getCurrentBoard()->getQuestion($this->getCurrentColumn(), $this->getCurrentQuestion());
+    }
+    
+    public function getCurrentColumnName() {
+    	if (!$this->getHasCurrentQuestion() || $this->getInFinalJeopardy()) {
+    		return null;
+    	}
+    	
+    	return $this->getCurrentBoard()->getColumn($this->getCurrentColumn())->getName();
+    }
+    
+    public function getInFinalJeopardy() {
+    	return $this->getGameStage() == 3;
+    }
+    
+    public function getFinalJeopardy() {
+    	$q = array(
+    			'category' => $this->getGame()->getFinalCategory(),
+    			'question' => $this->getGame()->getFinalQuestion(),
+    			'answer' => $this->getGame()->getFinalAnswer());
+    	return $q;
+    }
+
+    public function __construct()
+    {
+        $this->players = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->moves = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return bigint 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string 
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set game_stage
+     *
+     * @param smallint $gameStage
+     */
+    public function setGameStage($gameStage)
+    {
+        $this->game_stage = $gameStage;
+    }
+
+    /**
+     * Get game_stage
+     *
+     * @return smallint 
+     */
+    public function getGameStage()
+    {
+        return $this->game_stage;
+    }
+
+    /**
+     * Set current_column
+     *
+     * @param smallint $currentColumn
+     */
+    public function setCurrentColumn($currentColumn)
+    {
+        $this->current_column = $currentColumn;
+    }
+
+    /**
+     * Get current_column
+     *
+     * @return smallint 
+     */
+    public function getCurrentColumn()
+    {
+        return $this->current_column;
+    }
+
+    /**
+     * Set current_question
+     *
+     * @param smallint $currentQuestion
+     */
+    public function setCurrentQuestion($currentQuestion)
+    {
+        $this->current_question = $currentQuestion;
+    }
+
+    /**
+     * Get current_question
+     *
+     * @return smallint 
+     */
+    public function getCurrentQuestion()
+    {
+        return $this->current_question;
+    }
+
+    /**
+     * Set game
+     *
+     * @param DLauritz\Jeopardy\GameBundle\Entity\Game $game
+     */
+    public function setGame(\DLauritz\Jeopardy\GameBundle\Entity\Game $game)
+    {
+        $this->game = $game;
+    }
+
+    /**
+     * Get game
+     *
+     * @return DLauritz\Jeopardy\GameBundle\Entity\Game 
+     */
+    public function getGame()
+    {
+        return $this->game;
+    }
+
+    /**
+     * Set moderator
+     *
+     * @param DLauritz\Jeopardy\MainBundle\Entity\User $moderator
+     */
+    public function setModerator(\DLauritz\Jeopardy\MainBundle\Entity\User $moderator)
+    {
+        $this->moderator = $moderator;
+    }
+
+    /**
+     * Get moderator
+     *
+     * @return DLauritz\Jeopardy\MainBundle\Entity\User 
+     */
+    public function getModerator()
+    {
+        return $this->moderator;
+    }
+    
+    /**
+     * Add players
+     *
+     * @param DLauritz\Jeopardy\MainBundle\Entity\Player $players
+     */
+    public function addPlayer(\DLauritz\Jeopardy\MainBundle\Entity\Player $players)
+    {
+        $this->players[] = $players;
+    }
+
+    /**
+     * Get players
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPlayers()
+    {
+        return $this->players;
+    }
+
+    /**
+     * Add moves
+     *
+     * @param DLauritz\Jeopardy\MainBundle\Entity\Move $moves
+     */
+    public function addMove(\DLauritz\Jeopardy\MainBundle\Entity\Move $moves)
+    {
+        $this->moves[] = $moves;
+    }
+
+    /**
+     * Get moves
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getMoves()
+    {
+        return $this->moves;
+    }
+}

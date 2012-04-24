@@ -1,0 +1,102 @@
+{% extends '::baselayout.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('js/jquery.md5.js') }}"></script>
+{% endblock %}
+
+{% block header_script %}
+function setConfirmPassword(ok) {
+	if (ok) {
+		$("#passok").removeClass("icon-remove").addClass("icon-ok");
+	} else {
+		$("#passok").removeClass("icon-ok").addClass("icon-remove");
+	}
+}
+
+function checkConfirmPassword(e) {
+	pass = $("#{{ form.password.first.vars.id }}");
+	conf = $("#{{ form.password.second.vars.id }}");
+	
+	ret = $(pass).val() == $(conf).val() && $(pass).val() != '';
+	
+	setConfirmPassword(ret);
+}
+{% endblock %}
+
+{% block jquery_ready %}
+	{{ parent() }}
+	
+	// Confirm Password Check
+	pass = $("#{{ form.password.first.vars.id }}");
+	conf = $("#{{ form.password.second.vars.id }}");
+	$(pass).keyup(checkConfirmPassword);
+	$(conf).keyup(checkConfirmPassword);
+	
+	// Encrypt password before sending
+	$("#registersubmit").click(function() {
+		$(pass).val($.md5($(pass).val()));
+		$(conf).val($.md5($(conf).val()));
+	});
+{% endblock %}
+
+{% block content %}
+{% if form_errors(form) %}
+<div class="row">
+	<div class="span6 offset3">
+		<div class="alert alert-error fade in">
+			<a class="close" data-dismiss="alert">&times;</a>
+			<strong>Error:</strong>
+			{{ form_errors(form) }}
+		</div>
+	</div>
+</div>
+{% endif %}
+
+<div class="row">
+	<div class="span6 offset3">
+		<form class="well form-horizontal" id="registerform" name="registerform" action="{{ path('register_check') }}" method="POST" enctype="{{ form_enctype(form) }}">
+			<fieldset>
+				<legend>Register <small>All fields are required</small></legend>
+				<div class="control-group">
+					{{ form_label(form.email, "E-Mail Address", {'attr':{'class':'control-label'}}) }}
+					<div class="controls">
+						{{ form_widget(form.email, {'attr':{'class':'input-large'}}) }}
+						<span class="help-inline">{{ form_errors(form.email) }}</span>
+					</div>
+				</div>
+				<div class="control-group">
+					{{ form_label(form.password.first, "Password", {'attr':{'class':'control-label'}}) }}
+					<div class="controls">
+						{{ form_widget(form.password.first, {'attr':{'class':'input-large'}}) }}
+						<span class="help-inline">{{ form_errors(form.password) }}</span>
+					</div>
+				</div>
+				<div class="control-group">
+					{{ form_label(form.password.second, "Confirm Password", {'attr':{'class':'control-label' }}) }}
+					<div class="controls">
+						{{ form_widget(form.password.second, { 'attr': { 'class': 'input-large' }}) }}
+						<span class="help-inline"><i id="passok" class="icon-remove"></i></span>
+					</div>
+				</div>
+				<div class="control-group">
+					{{ form_label(form.display_name, "Display Name", {'attr':{'class':'control-label'}}) }}
+					<div class="controls">
+						{{ form_widget(form.display_name, {'attr':{'class':'input-large'}}) }}
+						<span class="help-inline">{{ form_errors(form.display_name) }}</span>
+					</div>
+				</div>
+				
+				<div class="form-actions">
+					<button type="submit" id="registersubmit" class="btn btn-primary">Submit</button>
+					<a class="btn" href="{{ path('home') }}">Cancel</a>
+					<button type="reset" class="btn">Clear</button>
+				</div>
+				{{ form_rest(form) }}
+			</fieldset>
+		</form>
+	</div>
+</div>
+{% endblock %}
